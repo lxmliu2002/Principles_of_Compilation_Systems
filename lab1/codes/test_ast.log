@@ -1,0 +1,23 @@
+test.c:4:8: error: expected expression
+    i *;
+       ^
+1 error generated.
+TranslationUnitDecl 0x848db8 <<invalid sloc>> <invalid sloc>
+|-TypedefDecl 0x8495e0 <<invalid sloc>> <invalid sloc> implicit __int128_t '__int128'
+| `-BuiltinType 0x849380 '__int128'
+|-TypedefDecl 0x849650 <<invalid sloc>> <invalid sloc> implicit __uint128_t 'unsigned __int128'
+| `-BuiltinType 0x8493a0 'unsigned __int128'
+|-TypedefDecl 0x849958 <<invalid sloc>> <invalid sloc> implicit __NSConstantString 'struct __NSConstantString_tag'
+| `-RecordType 0x849730 'struct __NSConstantString_tag'
+|   `-Record 0x8496a8 '__NSConstantString_tag'
+|-TypedefDecl 0x8499f0 <<invalid sloc>> <invalid sloc> implicit __builtin_ms_va_list 'char *'
+| `-PointerType 0x8499b0 'char *'
+|   `-BuiltinType 0x848e60 'char'
+|-TypedefDecl 0x849ce8 <<invalid sloc>> <invalid sloc> implicit __builtin_va_list 'struct __va_list_tag[1]'
+| `-ConstantArrayType 0x849c90 'struct __va_list_tag[1]' 1 
+|   `-RecordType 0x849ad0 'struct __va_list_tag'
+|     `-Record 0x849a48 '__va_list_tag'
+`-FunctionDecl 0x89f830 <test.c:1:1, line:5:1> line:1:5 main 'int ()'
+  `-CompoundStmt 0x89f9d0 <line:2:1, line:5:1>
+    `-DeclStmt 0x89f998 <line:3:5, col:10>
+      `-VarDecl 0x89f930 <col:5, col:9> col:9 used i 'int'

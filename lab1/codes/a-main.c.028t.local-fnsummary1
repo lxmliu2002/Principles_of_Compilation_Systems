@@ -1,0 +1,104 @@
+
+;; Function main (main, funcdef_no=0, decl_uid=2470, cgraph_uid=1, symbol_order=0)
+
+
+Analyzing function body size: main/0
+   fp_expression set
+
+IPA function summary for main/0 fp_expression
+  global time:     103.000000
+  self size:       32
+  global size:     0
+  min size:       0
+  self stack:      0
+  global stack:    0
+    size:13.000000, time:23.000000
+    size:2.000000, time:0.000000,  executed if:(not inlined)
+  calls:
+    printf/4 function body not available
+      freq:1.00 loop depth: 0 size: 3 time: 12
+    clock/2 function body not available
+      freq:1.00 loop depth: 0 size: 2 time: 11
+    printf/4 function body not available
+      freq:1.00 loop depth: 0 size: 3 time: 12
+    __builtin_puts/3 function body not available
+      freq:1.00 loop depth: 0 size: 2 time: 11
+    __builtin_puts/3 function body not available
+      freq:1.00 loop depth: 0 size: 2 time: 11
+    clock/2 function body not available
+      freq:1.00 loop depth: 0 size: 2 time: 11
+    scanf/1 function body not available
+      freq:1.00 loop depth: 0 size: 3 time: 12
+
+int main ()
+{
+  double time;
+  clock_t end;
+  clock_t start;
+  int f;
+  int n;
+  int i;
+  int D.2487;
+  int n.0_1;
+  long int _2;
+  double _3;
+  int _21;
+
+  <bb 2> :
+  scanf ("%d", &n);
+  i_10 = 2;
+  f_11 = 1;
+  start_13 = clock ();
+  if (i_10 <= 0)
+    goto <bb 3>; [INV]
+  else
+    goto <bb 4>; [INV]
+
+  <bb 3> :
+  __builtin_puts (&"i\xe5\xb0\x8f\xe4\xba\x8e1"[0]);
+
+  <bb 4> :
+  goto <bb 6>; [INV]
+
+  <bb 5> :
+  f_23 = f_5 * i_4;
+  i_24 = i_4 + 1;
+
+  <bb 6> :
+  # i_4 = PHI <i_10(4), i_24(5)>
+  # f_5 = PHI <f_11(4), f_23(5)>
+  n.0_1 = n;
+  if (i_4 <= n.0_1)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 7>; [INV]
+
+  <bb 7> :
+  if (f_5 > 10000)
+    goto <bb 8>; [INV]
+  else
+    goto <bb 9>; [INV]
+
+  <bb 8> :
+  __builtin_puts (&"\xe8\xbe\x93\xe5\x87\xba\xe8\xb6\x85\xe9\x99\x90"[0]);
+  goto <bb 10>; [INV]
+
+  <bb 9> :
+  printf ("%d\n", f_5);
+
+  <bb 10> :
+  end_18 = clock ();
+  _2 = end_18 - start_13;
+  _3 = (double) _2;
+  time_19 = _3 / 1.0e+6;
+  printf ("\xe7\xa8\x8b\xe5\xba\x8f\xe8\xbf\x90\xe8\xa1\x8c\xe6\x97\xb6\xe9\x97\xb4\xe4\xb8\xba\xef\xbc\x9a%f\n", time_19);
+  _21 = 0;
+  n ={v} {CLOBBER};
+
+  <bb 11> :
+<L9>:
+  return _21;
+
+}
+
+

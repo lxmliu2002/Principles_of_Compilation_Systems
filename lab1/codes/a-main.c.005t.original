@@ -1,0 +1,49 @@
+
+;; Function main (null)
+;; enabled by -tree-original
+
+
+{
+  int i;
+  int n;
+  int f;
+  clock_t start;
+  clock_t end;
+  double time;
+
+    int i;
+    int n;
+    int f;
+  scanf ((const char * restrict) "%d", &n);
+  i = 2;
+  f = 1;
+    clock_t start;
+    clock_t end;
+    double time;
+  start = clock ();
+  if (i <= 0)
+    {
+      printf ((const char * restrict) "i\xe5\xb0\x8f\xe4\xba\x8e1\n");
+    }
+  goto <D.2479>;
+  <D.2480>:;
+  f = f * i;
+  i = i + 1;
+  <D.2479>:;
+  if (i <= n) goto <D.2480>; else goto <D.2478>;
+  <D.2478>:;
+  if (f > 10000)
+    {
+      printf ((const char * restrict) "\xe8\xbe\x93\xe5\x87\xba\xe8\xb6\x85\xe9\x99\x90\n");
+    }
+  else
+    {
+      printf ((const char * restrict) "%d\n", f);
+    }
+  end = clock ();
+  time = (double) (end - start) / 1.0e+6;
+  printf ((const char * restrict) "\xe7\xa8\x8b\xe5\xba\x8f\xe8\xbf\x90\xe8\xa1\x8c\xe6\x97\xb6\xe9\x97\xb4\xe4\xb8\xba\xef\xbc\x9a%f\n", time);
+  return 0;
+}
+return 0;
+

@@ -1,0 +1,87 @@
+
+;; Function main (main, funcdef_no=0, decl_uid=2470, cgraph_uid=1, symbol_order=0)
+
+main.c:31: printf: objsize = 9223372036854775807, fmtstr = "%d
+"
+  Directive 1 at offset 0: "%d"
+    Result: 1, 1, 11, 11 (1, 1, 11, 11)
+  Directive 2 at offset 2: "
+", length = 1
+    Result: 1, 1, 1, 1 (2, 2, 12, 12)
+  Directive 3 at offset 3: "", length = 1
+main.c:35: printf: objsize = 9223372036854775807, fmtstr = "程序运行时间为：%f
+"
+  Directive 1 at offset 0: "程序运行时间为：", length = 24
+    Result: 24, 24, 24, 24 (24, 24, 24, 24)
+  Directive 2 at offset 24: "%f"
+    Result: 3, 8, 317, 322 (27, 32, 341, 346)
+  Directive 3 at offset 26: "
+", length = 1
+    Result: 1, 1, 1, 1 (28, 33, 342, 347)
+  Directive 4 at offset 27: "", length = 1
+int main ()
+{
+  double time;
+  clock_t end;
+  clock_t start;
+  int f;
+  int n;
+  int i;
+  int D.2487;
+
+  <bb 2> :
+  scanf ("%d", &n);
+  i = 2;
+  f = 1;
+  start = clock ();
+  if (i <= 0)
+    goto <bb 3>; [INV]
+  else
+    goto <bb 4>; [INV]
+
+  <bb 3> :
+  __builtin_puts (&"i\xe5\xb0\x8f\xe4\xba\x8e1"[0]);
+
+  <bb 4> :
+  goto <bb 6>; [INV]
+
+  <bb 5> :
+  f = f * i;
+  i = i + 1;
+
+  <bb 6> :
+  n.0_1 = n;
+  if (i <= n.0_1)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 7>; [INV]
+
+  <bb 7> :
+  if (f > 10000)
+    goto <bb 8>; [INV]
+  else
+    goto <bb 9>; [INV]
+
+  <bb 8> :
+  __builtin_puts (&"\xe8\xbe\x93\xe5\x87\xba\xe8\xb6\x85\xe9\x99\x90"[0]);
+  goto <bb 10>; [INV]
+
+  <bb 9> :
+  printf ("%d\n", f);
+
+  <bb 10> :
+  end = clock ();
+  _2 = end - start;
+  _3 = (double) _2;
+  time = _3 / 1.0e+6;
+  printf ("\xe7\xa8\x8b\xe5\xba\x8f\xe8\xbf\x90\xe8\xa1\x8c\xe6\x97\xb6\xe9\x97\xb4\xe4\xb8\xba\xef\xbc\x9a%f\n", time);
+  D.2487 = 0;
+  n = {CLOBBER};
+
+  <bb 11> :
+<L9>:
+  return D.2487;
+
+}
+
+

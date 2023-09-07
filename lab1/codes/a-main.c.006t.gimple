@@ -1,0 +1,55 @@
+int main ()
+{
+  int D.2487;
+
+  {
+    int i;
+    int n;
+    int f;
+    clock_t start;
+    clock_t end;
+    double time;
+
+    try
+      {
+        scanf ("%d", &n);
+        i = 2;
+        f = 1;
+        start = clock ();
+        if (i <= 0) goto <D.2482>; else goto <D.2483>;
+        <D.2482>:
+        printf ("i\xe5\xb0\x8f\xe4\xba\x8e1\n");
+        <D.2483>:
+        goto <D.2479>;
+        <D.2480>:
+        f = f * i;
+        i = i + 1;
+        <D.2479>:
+        n.0_1 = n;
+        if (i <= n.0_1) goto <D.2480>; else goto <D.2478>;
+        <D.2478>:
+        if (f > 10000) goto <D.2484>; else goto <D.2485>;
+        <D.2484>:
+        printf ("\xe8\xbe\x93\xe5\x87\xba\xe8\xb6\x85\xe9\x99\x90\n");
+        goto <D.2486>;
+        <D.2485>:
+        printf ("%d\n", f);
+        <D.2486>:
+        end = clock ();
+        _2 = end - start;
+        _3 = (double) _2;
+        time = _3 / 1.0e+6;
+        printf ("\xe7\xa8\x8b\xe5\xba\x8f\xe8\xbf\x90\xe8\xa1\x8c\xe6\x97\xb6\xe9\x97\xb4\xe4\xb8\xba\xef\xbc\x9a%f\n", time);
+        D.2487 = 0;
+        return D.2487;
+      }
+    finally
+      {
+        n = {CLOBBER};
+      }
+  }
+  D.2487 = 0;
+  return D.2487;
+}
+
+
