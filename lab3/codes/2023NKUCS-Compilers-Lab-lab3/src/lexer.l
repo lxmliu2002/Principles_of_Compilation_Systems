@@ -102,14 +102,19 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
+"==" {
+    dump_tokens("EQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+	column += yyleng;
+}
+
 "=" {
     dump_tokens("ASSIGN\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
     eqLeft = 0;
 }
 
-"==" {
-    dump_tokens("EQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+"!=" {
+    dump_tokens("NOTEQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
 }
 
@@ -118,8 +123,8 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
-"!=" {
-    dump_tokens("NOTEQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+"<=" {
+    dump_tokens("LESSEQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
 }
 
@@ -128,18 +133,13 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
-"<=" {
-    dump_tokens("LESSEQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+">=" {
+    dump_tokens("GREATEREQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
 }
 
 ">" {
     dump_tokens("GREATER\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
-	column += yyleng;
-}
-
-">=" {
-    dump_tokens("GREATEREQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
 }
 
