@@ -1,4 +1,5 @@
 #include<cstring>
+#include<iostream>
 #include "../include/symtab.h"
 
 SymbolTable::SymbolTable(Scope* r)
@@ -9,19 +10,21 @@ SymbolTable::SymbolTable(Scope* r)
         root = temp;
     }
     else
+    {
         root = r;
+    }
     root->parent = nullptr;
     curr = root;
 }
 
 void SymbolTable::addChild(Scope* parent,Scope* child)
 {
+    child->parent = parent;
     parent->children.push_back(child);
 }
 
 void SymbolTable::addSymbol(Symbol* sym, Scope* sc)
 {
-
     sc->symbols.push_back(sym);
 }
 
@@ -37,19 +40,25 @@ Scope* SymbolTable::getParent(Scope* child)
 
 Scope* SymbolTable::findScope(char* name, Scope* sc)
 {
-    Scope* curr = sc;
-    if(curr != nullptr)
+    Scope* temp = sc;
+    while(temp != nullptr)
     {
-        std::vector<Symbol*>::iterator it = sc->symbols.begin();
-        while (it != sc->symbols.end())
+        std::vector<Symbol*>::iterator it = temp->symbols.begin();
+        while (it != temp->symbols.end())
         {
             if(!strcmp((*it)->name, name)) 
-                return curr;
+                return temp;
             it++;
         }
-        curr = curr->parent;
-        if(curr == nullptr) 
-            return nullptr;
+        temp = temp->parent;
     }
     return nullptr;
 }
+/*
+SymbolTable* SymbolTable::findSymbolTable(char* name, SymbolTable* sy = nullptr)
+{
+    SymbolTable* curr = nullptr;
+
+    Scope* sc = 
+}
+*/
