@@ -102,6 +102,21 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
+"while" {
+    dump_tokens("WHILE\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+	column += yyleng;
+}
+
+"continue" {
+    dump_tokens("CONTINUE\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+	column += yyleng;
+}
+
+"break" {
+    dump_tokens("BREAK\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
+	column += yyleng;
+}
+
 "==" {
     dump_tokens("EQUAL\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
@@ -224,21 +239,30 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
     symbolTable->retParent();
 }
 
-"while" {
-    dump_tokens("WHILE\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
-	column += yyleng;
-}
-
-"break" {
-    dump_tokens("BREAK\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
-	column += yyleng;
-}
-
 {DECIMIAL} {
     int decimal;
     decimal = atoi(yytext);
     dump_tokens("DECIMAL\t%s\t%d\t%d\t%d\n", yytext, yylineno - 1, column, decimal);
     column += yyleng;
+}
+
+{OCTNUM} {
+    int octnum = 0;
+    sscanf(yytext, "%o", &octnum);
+    dump_tokens("OCTNUM\t%s\t%d\t%d\n", yytext, yylineno - 1, column, octnum);
+	column += yyleng;
+}
+
+{HEXNUM} {
+    int hexnum = 0;
+    sscanf(yytext, "%x", &hexnum);
+    dump_tokens("HEXNUM\t%s\t%d\t%d\n", yytext, yylineno - 1, column, hexnum);
+	column += yyleng;
+}
+
+{FLOATNUM} {
+    dump_tokens("FLOATNUM\t%s\t%d\t%d\t%f\n", yytext, yylineno - 1, column, atof(yytext));
+	column += yyleng;
 }
 
 <DEF>{FUNCID} {
@@ -293,32 +317,6 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
-{EOL} { column=0;}
-
-{WHITE} {
-    column += yyleng;
-}
-
-
-{OCTNUM} {
-    std::string s(yytext);
-    int octnum = std::stoi(s, nullptr, 8);
-    dump_tokens("OCTNUM\t%s\t%d\t%d\n", yytext, yylineno - 1, column, octnum);
-	column += yyleng;
-}
-
-{HEXNUM} {
-    std::string s(yytext);
-    int hexnum = std::stoi(s, nullptr, 16);
-    dump_tokens("HEXNUM\t%s\t%d\t%d\n", yytext, yylineno - 1, column, hexnum);
-	column += yyleng;
-}
-
-{FLOATNUM} {
-    dump_tokens("FLOATNUM\t%s\t%d\t%d\t%f\n", yytext, yylineno - 1, column, atof(yytext));
-	column += yyleng;
-}
-
 "//" {
     dump_tokens("SCOMMENT\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
@@ -331,15 +329,14 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 }
 
 <SCOMMENT>\n {
-    
     column = 0;
     BEGIN INITIAL;
 }
 
-"/*" { 
+"/*" {
     dump_tokens("MCOMMENTBEGIN\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
-    BEGIN MCOMMENT; 
+    BEGIN MCOMMENT;
 }
 
 <MCOMMENT>"*/" {
@@ -357,6 +354,11 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
     column = 0;
 }
 
+{EOL} { column=0;}
+
+{WHITE} {
+    column += yyleng;
+}
 
 
 %%
