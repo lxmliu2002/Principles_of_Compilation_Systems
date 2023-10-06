@@ -64,6 +64,11 @@ int main(int argc, char *argv[])
     se = new IdentifierSymbolEntry(funcType, "getch", identifiers->getLevel());
     identifiers->install("getch", se);
 
+    // getfloat
+    funcType = new FunctionType(TypeSystem::floatType, {});
+    se = new IdentifierSymbolEntry(funcType, "getfloat", identifiers->getLevel());
+    identifiers->install("getfloat", se);
+
     // getarray
     funcType = new FunctionType(TypeSystem::intType, {});
     se = new IdentifierSymbolEntry(funcType, "getarray", identifiers->getLevel());
@@ -78,6 +83,11 @@ int main(int argc, char *argv[])
     funcType = new FunctionType(TypeSystem::voidType, {});
     se = new IdentifierSymbolEntry(funcType, "putch", identifiers->getLevel());
     identifiers->install("putch", se);
+
+    // putfloat
+    funcType = new FunctionType(TypeSystem::voidType, {});
+    se = new IdentifierSymbolEntry(funcType, "putfloat", identifiers->getLevel());
+    identifiers->install("putfloat", se);
 
     // putarray
     funcType = new FunctionType(TypeSystem::voidType, {});
