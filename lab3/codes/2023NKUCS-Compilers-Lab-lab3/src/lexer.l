@@ -42,7 +42,7 @@ EOL (\r\n|\n|\r)
 WHITE [\t ]
 /*  Your code here (lab3). */
 /*十六进制数*/
-HEXNUM 0[xX][0-9]+
+HEXNUM 0[xX][0-9A-Fa-f]+
 /*八进制数*/
 OCTNUM 0[1-7][0-7]*
 /*浮点数*/
