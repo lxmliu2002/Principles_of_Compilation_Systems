@@ -67,8 +67,8 @@ expr	: expr ADD expr { $$ = $1 + $3; }  // 加法表达式
 
 %%
 
-int isLastCharPram = 0;
-int count = 0;
+int isLastCharPram = 0; //表示上一个字符是否是操作符
+int count = 0; //计算读入的字符的数量
 
 // 词法分析器
 int yylex()
@@ -87,7 +87,7 @@ int yylex()
 				yylval.dval = yylval.dval * 10 + t - '0';
 				t = getchar();
 			}
-			ungetc(t, stdin); // 将字符 t 放回输入流
+			ungetc(t, stdin); // 将字符 t 放回输入流,以便后续的输入函数可以再次读取
 			isLastCharPram = 0;
 			return NUMBER;
 		}

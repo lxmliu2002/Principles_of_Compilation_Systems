@@ -14,7 +14,7 @@ int yylex();
 extern int yyparse();
 FILE *yyin;
 void yyerror(const char *s);
-int flag = 0;
+int flag = 0;//是否第一个输入
 %}
 
 // %token 为每个符号分配不同的整数值
@@ -91,8 +91,6 @@ expr    : expr ADD expr {
 				printf("  .arch armv7-a\n");
 				printf("  .data\n");
 				printf("  .align 2\n");
-				printf("  .data\n");
-				printf("  .align 2\n");
 				printf("str:\n");
 				printf("  .ascii \" result:%%d\\n\"\n");
 				printf("  .text\n");
@@ -111,10 +109,14 @@ expr    : expr ADD expr {
 
 %%
 
+int isLastCharPram = 0; //表示上一个字符是否是操作符
+int count = 0; //计算读入的字符的数量
+
 
 int yylex()
 {
 	int t = 0;
+	count++;
 	while(1)
 	{
 		t = getchar();
@@ -131,34 +133,49 @@ int yylex()
 				t = getchar();
 			}
 			ungetc(t, stdin); // 将字符 t 放回输入流
+			isLastCharPram = 0;
 			return NUMBER;
 		}
 		else if (t == '-')
 		{
-			return MINUS;
+			if(count != 1 && isLastCharPram == 0)
+			{
+				return MINUS;
+			}
+			else
+			{
+				isLastCharPram = 0;
+				return UMINUS;
+			}
 		} 
 		else if (t == '(')
 		{
+			isLastCharPram = 1;
 			return LEFTPAR;
 		}
 		else if(t == ';')
 		{
+			count = 0;
 			return t;
 		}
 		else if(t == '+')
 		{
+			isLastCharPram = 0;
 			return ADD;
 		}
 		else if(t == '*')
 		{
+			isLastCharPram = 0;
 			return MUL;
 		}
 		else if (t == '/') 
 		{
+			isLastCharPram = 0;
 			return DIV;
 		}
 		else if (t == ')') 
 		{
+			isLastCharPram = 0;
 			return RIGHTPAR;
 		}
 		else 

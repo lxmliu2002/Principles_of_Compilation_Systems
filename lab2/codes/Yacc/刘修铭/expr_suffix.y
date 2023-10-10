@@ -4,12 +4,9 @@
 #include <ctype.h> 
 #include <string.h> 
 
-
-
 #ifndef YYSTYPE
 #define YYSTYPE char*  // 定义属性值类型
 #endif
-
 
 char idStr[50];
 char numStr[50];
@@ -18,9 +15,6 @@ extern int yyparse();
 FILE *yyin;
 void yyerror(const char *s);
 %}
-
-
-
 
 // %token 为每个符号分配不同的整数值
 %token ADD      
@@ -31,16 +25,12 @@ void yyerror(const char *s);
 %token RIGHTPAR
 %token NUMBER // 数字对应属性值，以字符串形式存储
 %token UMINUS // 取相反数
-//%token equal
 %token ID  // 标识符对应属性值
 
-//%right equal
 %left ADD MINUS
 %left MUL DIV
 %right UMINUS
 %left LEFTPAR RIGHTPAR
-
-
 
 %%
 
@@ -59,14 +49,15 @@ expr    : expr ADD expr { $$ = (char *)malloc(50*sizeof(char)); strcpy($$, $1); 
 		| NUMBER { $$ = (char *)malloc(50*sizeof(char)); strcpy($$, $1); }  // 数字表达式
 		| ID { $$ = (char *)malloc(50*sizeof(char)); strcpy($$, $1); strcat($$, "");}  // 变量引用表达式
 		;
-
-
 %%
 
+int isLastCharPram = 0; //表示上一个字符是否是操作符
+int count = 0; //计算读入的字符的数量
 
 int yylex()
 {
 	int t = 0;
+	count++;
 	while(1)
 	{
 		t = getchar();
@@ -77,7 +68,6 @@ int yylex()
 		else if(t >= '0' && t <= '9')
 		{
 			int ti = 0;
-			//char numStr[50];
 			while (isdigit(t))	
 			{
 				numStr[ti] = t;
@@ -86,9 +76,8 @@ int yylex()
 			}
 			numStr[ti] = '\0';
 			ungetc(t, stdin); // 将字符 t 放回输入流
-
 			yylval = numStr;
-			
+			isLastCharPram = 0;
 			return NUMBER;
 		}
 		else if((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z' ) || (t == '_'))
@@ -101,38 +90,51 @@ int yylex()
 				ti++;
 			}
 			idStr[ti] = '\0'; // 字符串结尾
-
 			yylval = idStr;
-
 			ungetc(t, stdin);
+			isLastCharPram = 0;
 			return ID;
 		}
 		else if (t == '-')
 		{
-			return MINUS;
+			if(count != 1 && isLastCharPram == 0)
+			{
+				return MINUS;
+			}
+			else
+			{
+				isLastCharPram = 0;
+				return UMINUS;
+			}
 		} 
 		else if (t == '(')
 		{
+			isLastCharPram = 1;
 			return LEFTPAR;
 		}
 		else if(t == ';')
 		{
+			count = 0;
 			return t;
 		}
 		else if(t == '+')
 		{
+			isLastCharPram = 0;
 			return ADD;
 		}
 		else if(t == '*')
 		{
+			isLastCharPram = 0;
 			return MUL;
 		}
 		else if (t == '/') 
 		{
+			isLastCharPram = 0;
 			return DIV;
 		}
 		else if (t == ')') 
 		{
+			isLastCharPram = 0;
 			return RIGHTPAR;
 		}
 		else 

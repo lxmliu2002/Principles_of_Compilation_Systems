@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "ARM.y"
+#line 1 "./ARM.y"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -86,7 +86,7 @@ FILE *yyin;
 void yyerror(const char *s);
 int flag = 0;
 
-#line 90 "ARM.c"
+#line 90 "./ARM.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1140,7 +1140,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* lines: lines expr ';'  */
-#line 37 "ARM.y"
+#line 37 "./ARM.y"
                         {
 			printf("  pop {r1}\n");
 			printf("  ldr r0, =str\n");
@@ -1152,11 +1152,11 @@ yyreduce:
 			printf("%d\n", yyvsp[-1]); 
 			flag = 0;
 			}
-#line 1156 "ARM.c"
+#line 1156 "./ARM.c"
     break;
 
   case 5: /* expr: expr ADD expr  */
-#line 52 "ARM.y"
+#line 52 "./ARM.y"
                         {
 
 			printf("  pop {r0, r1}\n");
@@ -1164,33 +1164,33 @@ yyreduce:
 			printf("  push {r0}\n");
 			yyval = yyvsp[-2] + yyvsp[0];
 			}
-#line 1168 "ARM.c"
+#line 1168 "./ARM.c"
     break;
 
   case 6: /* expr: expr MINUS expr  */
-#line 59 "ARM.y"
+#line 59 "./ARM.y"
                                   {
 			printf("  pop {r0, r1}\n");
 			printf("  sub r0, r0, r1\n");
 			printf("  push {r0}\n");
 			yyval = yyvsp[-2] - yyvsp[0];
 			}
-#line 1179 "ARM.c"
+#line 1179 "./ARM.c"
     break;
 
   case 7: /* expr: expr MUL expr  */
-#line 65 "ARM.y"
+#line 65 "./ARM.y"
                                 {
 			printf("  pop {r0, r1}\n");
 			printf("  mul r0, r0, r1\n");
 			printf("  push {r0}\n");
 			yyval = yyvsp[-2] * yyvsp[0];
 			}
-#line 1190 "ARM.c"
+#line 1190 "./ARM.c"
     break;
 
   case 8: /* expr: expr DIV expr  */
-#line 71 "ARM.y"
+#line 71 "./ARM.y"
                                 {
 			printf("  pop {r1}\n");
 			printf("  pop {r0}\n");
@@ -1198,19 +1198,19 @@ yyreduce:
 			printf("  push {r0}\n");
 			yyval = yyvsp[-2] / yyvsp[0];
 			}
-#line 1202 "ARM.c"
+#line 1202 "./ARM.c"
     break;
 
   case 9: /* expr: LEFTPAR expr RIGHTPAR  */
-#line 78 "ARM.y"
+#line 78 "./ARM.y"
                                         {
 			yyval = yyvsp[-1];
 			}
-#line 1210 "ARM.c"
+#line 1210 "./ARM.c"
     break;
 
   case 10: /* expr: UMINUS expr  */
-#line 81 "ARM.y"
+#line 81 "./ARM.y"
                                            {
 			printf("  pop r0, r1\n");
 			printf("  mov r0, #0\n");
@@ -1218,11 +1218,11 @@ yyreduce:
 			printf("  push {r0}\n");
 			yyval = -yyvsp[0];
 			}
-#line 1222 "ARM.c"
+#line 1222 "./ARM.c"
     break;
 
   case 11: /* expr: NUMBER  */
-#line 88 "ARM.y"
+#line 88 "./ARM.y"
                          {
 			if(flag == 0)
 			{
@@ -1245,11 +1245,11 @@ yyreduce:
 			flag = 1;
 			yyval = yyvsp[0];
 			}
-#line 1249 "ARM.c"
+#line 1249 "./ARM.c"
     break;
 
 
-#line 1253 "ARM.c"
+#line 1253 "./ARM.c"
 
       default: break;
     }
@@ -1442,13 +1442,17 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 112 "ARM.y"
+#line 112 "./ARM.y"
 
+
+int isLastCharPram = 0; //表示上一个字符是否是操作符
+int count = 0; //计算读入的字符的数量
 
 
 int yylex()
 {
 	int t = 0;
+	count++;
 	while(1)
 	{
 		t = getchar();
@@ -1465,11 +1469,20 @@ int yylex()
 				t = getchar();
 			}
 			ungetc(t, stdin); // 将字符 t 放回输入流
+			isLastCharPram = 0;
 			return NUMBER;
 		}
 		else if (t == '-')
 		{
-			return MINUS;
+			if(count != 1 && isLastCharPram == 0)
+			{
+				return MINUS;
+			}
+			else
+			{
+				isLastCharPram = 0;
+				return UMINUS;
+			}
 		} 
 		else if (t == '(')
 		{

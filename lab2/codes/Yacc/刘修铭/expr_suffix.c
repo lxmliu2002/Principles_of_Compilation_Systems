@@ -67,19 +67,16 @@
 
 
 /* First part of user prologue.  */
-#line 1 "1expr_suffix.y"
+#line 1 "./expr_suffix.y"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h> 
 #include <string.h> 
 
-
-
 #ifndef YYSTYPE
 #define YYSTYPE char*  // 定义属性值类型
 #endif
-
 
 char idStr[50];
 char numStr[50];
@@ -88,7 +85,7 @@ extern int yyparse();
 FILE *yyin;
 void yyerror(const char *s);
 
-#line 92 "1expr_suffix.c"
+#line 89 "./expr_suffix.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -577,8 +574,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    48,    48,    49,    50,    53,    54,    55,    56,    57,
-      58,    59,    60
+       0,    38,    38,    39,    40,    43,    44,    45,    46,    47,
+      48,    49,    50
 };
 #endif
 
@@ -1150,61 +1147,61 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* lines: lines expr ';'  */
-#line 48 "1expr_suffix.y"
+#line 38 "./expr_suffix.y"
                                 { printf("%s\n", yyvsp[-1]); }
-#line 1156 "1expr_suffix.c"
+#line 1153 "./expr_suffix.c"
     break;
 
   case 5: /* expr: expr ADD expr  */
-#line 53 "1expr_suffix.y"
+#line 43 "./expr_suffix.y"
                         { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[-2]); strcat(yyval, yyvsp[0]); strcat(yyval, "+"); }
-#line 1162 "1expr_suffix.c"
+#line 1159 "./expr_suffix.c"
     break;
 
   case 6: /* expr: expr MINUS expr  */
-#line 54 "1expr_suffix.y"
+#line 44 "./expr_suffix.y"
                                   { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[-2]); strcat(yyval, yyvsp[0]); strcat(yyval, "-"); }
-#line 1168 "1expr_suffix.c"
+#line 1165 "./expr_suffix.c"
     break;
 
   case 7: /* expr: expr MUL expr  */
-#line 55 "1expr_suffix.y"
+#line 45 "./expr_suffix.y"
                                 { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[-2]); strcat(yyval, yyvsp[0]); strcat(yyval, "*"); }
-#line 1174 "1expr_suffix.c"
+#line 1171 "./expr_suffix.c"
     break;
 
   case 8: /* expr: expr DIV expr  */
-#line 56 "1expr_suffix.y"
+#line 46 "./expr_suffix.y"
                                 { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[-2]); strcat(yyval, yyvsp[0]); strcat(yyval, "/"); }
-#line 1180 "1expr_suffix.c"
+#line 1177 "./expr_suffix.c"
     break;
 
   case 9: /* expr: LEFTPAR expr RIGHTPAR  */
-#line 57 "1expr_suffix.y"
+#line 47 "./expr_suffix.y"
                                         { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[-1]); }
-#line 1186 "1expr_suffix.c"
+#line 1183 "./expr_suffix.c"
     break;
 
   case 10: /* expr: UMINUS expr  */
-#line 58 "1expr_suffix.y"
+#line 48 "./expr_suffix.y"
                                            { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[0]); strcat(yyval, " UMINUS"); }
-#line 1192 "1expr_suffix.c"
+#line 1189 "./expr_suffix.c"
     break;
 
   case 11: /* expr: NUMBER  */
-#line 59 "1expr_suffix.y"
+#line 49 "./expr_suffix.y"
                          { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[0]); }
-#line 1198 "1expr_suffix.c"
+#line 1195 "./expr_suffix.c"
     break;
 
   case 12: /* expr: ID  */
-#line 60 "1expr_suffix.y"
-                     { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[0]); strcat(yyval, " ");}
-#line 1204 "1expr_suffix.c"
+#line 50 "./expr_suffix.y"
+                     { yyval = (char *)malloc(50*sizeof(char)); strcpy(yyval, yyvsp[0]); strcat(yyval, "");}
+#line 1201 "./expr_suffix.c"
     break;
 
 
-#line 1208 "1expr_suffix.c"
+#line 1205 "./expr_suffix.c"
 
       default: break;
     }
@@ -1397,13 +1394,16 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 64 "1expr_suffix.y"
+#line 54 "./expr_suffix.y"
 
 
+int isLastCharPram = 0; //表示上一个字符是否是操作符
+int count = 0; //计算读入的字符的数量
 
 int yylex()
 {
 	int t = 0;
+	count++;
 	while(1)
 	{
 		t = getchar();
@@ -1414,7 +1414,6 @@ int yylex()
 		else if(t >= '0' && t <= '9')
 		{
 			int ti = 0;
-			//char numStr[50];
 			while (isdigit(t))	
 			{
 				numStr[ti] = t;
@@ -1423,9 +1422,8 @@ int yylex()
 			}
 			numStr[ti] = '\0';
 			ungetc(t, stdin); // 将字符 t 放回输入流
-
 			yylval = numStr;
-			
+			isLastCharPram = 0;
 			return NUMBER;
 		}
 		else if((t >= 'a' && t <= 'z') || (t >= 'A' && t <= 'Z' ) || (t == '_'))
@@ -1438,38 +1436,51 @@ int yylex()
 				ti++;
 			}
 			idStr[ti] = '\0'; // 字符串结尾
-
 			yylval = idStr;
-
 			ungetc(t, stdin);
+			isLastCharPram = 0;
 			return ID;
 		}
 		else if (t == '-')
 		{
-			return MINUS;
+			if(count != 1 && isLastCharPram == 0)
+			{
+				return MINUS;
+			}
+			else
+			{
+				isLastCharPram = 0;
+				return UMINUS;
+			}
 		} 
 		else if (t == '(')
 		{
+			isLastCharPram = 1;
 			return LEFTPAR;
 		}
 		else if(t == ';')
 		{
+			count = 0;
 			return t;
 		}
 		else if(t == '+')
 		{
+			isLastCharPram = 0;
 			return ADD;
 		}
 		else if(t == '*')
 		{
+			isLastCharPram = 0;
 			return MUL;
 		}
 		else if (t == '/') 
 		{
+			isLastCharPram = 0;
 			return DIV;
 		}
 		else if (t == ')') 
 		{
+			isLastCharPram = 0;
 			return RIGHTPAR;
 		}
 		else 
