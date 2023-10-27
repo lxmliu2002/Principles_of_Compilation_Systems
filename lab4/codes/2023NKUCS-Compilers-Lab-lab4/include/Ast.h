@@ -2,6 +2,7 @@
 #define __AST_H__
 
 #include <fstream>
+#include <vector>
 
 class SymbolEntry;
 
@@ -45,7 +46,7 @@ private:
     ExprNode *expr2; // 右侧操作数
 
 public:
-    enum
+    enum binaryOp
     {
         ADD,
         SUB,
@@ -75,7 +76,7 @@ private:
     ExprNode *expr;  // 操作数
 
 public:
-    enum
+    enum unaryOp
     {
         ADD,
         SUB,

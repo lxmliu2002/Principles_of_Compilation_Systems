@@ -24,6 +24,7 @@ public:
     void retParent();
     Scope* getParent(Scope* child);
     Scope* findScope(char* name, Scope* sc = nullptr);
+    Symbol* getSymbol(char* name, Scope* sc);
     //SymbolTable* SymbolTable::findSymbolTable(char* name, SymbolTable* sy = nullptr);
     ~SymbolTable(){};
 }; 

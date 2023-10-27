@@ -213,11 +213,11 @@ SCOMMENT \/\/[^\n]*
 }
 
 {ID} {
+    yylval.strtype = strdup(yytext);
     dump_tokens("ID\t%s\n", yytext);
-    char *lexeme;
-    lexeme = new char[strlen(yytext) + 1];
-    strcpy(lexeme, yytext);
-    yylval.strtype = lexeme;
+    //char *lexeme;
+    // lexeme = new char[strlen(yytext) + 1];
+    // strcpy(lexeme, yytext);
     return ID;
 }
 

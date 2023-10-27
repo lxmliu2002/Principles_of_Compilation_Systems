@@ -30,7 +30,7 @@ $(LEXER):$(FLEX)
 	@flex -o $@ $<
 
 $(PARSER):$(BISON)
-	@bison -o $@ $< --warnings=error=all --defines=$(PARSERH)
+	@bison -o $@ $< --warnings=error=all --defines=$(PARSERH) -Wcounterexamples
 
 $(OBJ_PATH)/%.o:$(SRC_PATH)/%.cpp
 	@mkdir -p $(OBJ_PATH)

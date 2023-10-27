@@ -313,7 +313,7 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
     {
         sc = temp;
     }
-    dump_tokens("ID\t%s\t%d\t%d\t%p\n", yytext, yylineno - 1, column, sc);
+    dump_tokens("ID\t%s\t%d\t%d\t%p\n", yytext, yylineno - 1, column, symbolTable->getSymbol(yytext, sc));
 	column += yyleng;
 }
 

@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "%s: fail to open output file\n", outfile);
         exit(EXIT_FAILURE);
     }
+    printf("%s\n", argv[optind]);
     Type *funcType;
     funcType = new FunctionType(TypeSystem::intType, {});
     SymbolEntry *se = new IdentifierSymbolEntry(funcType, "getint", identifiers->getLevel());

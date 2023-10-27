@@ -54,6 +54,16 @@ Scope* SymbolTable::findScope(char* name, Scope* sc)
     }
     return nullptr;
 }
+
+Symbol* SymbolTable::getSymbol(char* name, Scope* sc)
+{
+    for(auto s : sc->symbols)
+    {
+        if(strcmp(name, s->name) == 0)
+            return s;
+    }
+    return nullptr;
+}
 /*
 SymbolTable* SymbolTable::findSymbolTable(char* name, SymbolTable* sy = nullptr)
 {

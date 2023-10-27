@@ -31,15 +31,23 @@
 %token CONST
 %token RETURN BREAK CONTINUE
 
-%nterm <stmttype> Stmts Stmt AssignStmt BlockStmt IfStmt WhileStmt BreakStmt ContinueStmt ReturnStmt DeclStmt FuncDef EmptyStmt FuncDefParams FuncDefParam VarDefs ConstDefs VarDef ConstDef ExprStmt MaybeFuncDefParams
-%nterm <exprtype> Exp AddExp MulExp UnaryExp FuncCallExp Cond LOrExp EqExp PrimaryExp LVal RelExp LAndExp FuncCallParams
+%nterm <stmttype> Stmts Stmt AssignStmt BlockStmt IfStmt WhileStmt BreakStmt ContinueStmt ReturnStmt DeclStmt FuncDef EmptyStmt FuncDefParams FuncDefParam VarDefs ConstDefs VarDef ConstDef ExprStmt funcBlock
+%nterm <exprtype> Exp AddExp FuncCallExp Cond PrimaryExp LVal ExpList
 %nterm <type> Type
+
+%left OR
+%left AND
+%left EQUAL NOTEQUAL
+%left LESS LESSEQUAL GREATER GREATEREQUAL
+%left ADD SUB
+%left MUL DIV MOD
+%precedence UMINUS   
 
 %precedence THEN
 %precedence ELSE
 %%
 Program
-    : Stmt {
+    : Stmts {
         ast.setRoot($1);
     }
     ;
@@ -129,102 +137,106 @@ Exp
     : AddExp {$$ = $1;}
     ;
 Cond
-    : LOrExp {$$ = $1;}
+    : AddExp {$$ = $1;}
     ;
 PrimaryExp
-    : LPAREN Exp RPAREN {$$ = $2;}
-    | LVal {$$ = $1;}
+    : LVal {$$ = $1;}
     | INTEGER {
         SymbolEntry* se = new ConstantSymbolEntry(TypeSystem::intType, $1);
         $$ = new Constant(se);
     }
+    | FLOATNUM {
+        SymbolEntry* se = new ConstantSymbolEntry(TypeSystem::floatType, $1);
+        $$ = new Constant(se);
+    }
+    | FuncCallExp { $$ = $1; }
     ;
+
 AddExp
-    : MulExp {$$ = $1;} // 乘法表达式
-    | AddExp ADD MulExp { // 加法操作
+    : AddExp ADD AddExp {
         SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
     }
-    | AddExp SUB MulExp { // 减法操作
+    | AddExp SUB AddExp {
         SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
     }
-    ;
-MulExp
-    : UnaryExp {$$ = $1;} // 一元表达式
-    | MulExp MUL UnaryExp { // 乘法操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp MUL AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
     }
-    | MulExp DIV UnaryExp { // 除法操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp DIV AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
     }
-    | MulExp MOD UnaryExp { // 求余操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp MOD AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::MOD, $1, $3);
     }
-    ;
-UnaryExp
-    : PrimaryExp {$$ = $1;} // 主要表达式
-    | ADD UnaryExp { // 一元加法
+    | AddExp LESS AddExp {
         SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::ADD, $2);
-    }
-    | SUB UnaryExp { // 一元减法
-        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::SUB, $2);
-    }
-    | NOT UnaryExp { // 逻辑 NOT
-        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
-    }
-    | FuncCallExp {$$ = $1;} // 函数调用表达式
-    ;
-RelExp
-    : AddExp {$$ = $1;} // 加法表达式
-    | RelExp LESS AddExp { // 小于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::LESS, $1, $3);
     }
-    | RelExp LESSEQUAL AddExp { // 小于等于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp LESSEQUAL AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::LESSEQUAL, $1, $3);
     }
-    | RelExp GREATER AddExp { // 大于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp GREATER AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::GREATER, $1, $3);
     }
-    | RelExp GREATEREQUAL AddExp { // 大于等于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp GREATEREQUAL AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::GREATEREQUAL, $1, $3);
     }
-    ;
-EqExp
-    : RelExp {$$ = $1;} // 关系表达式
-    | EqExp EQUAL RelExp { // 等于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp EQUAL AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::EQUAL, $1, $3);
     }
-    | EqExp NOTEQUAL RelExp { // 不等于操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp NOTEQUAL AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::NOTEQUAL, $1, $3);
     }
-    ;
-LAndExp
-    : EqExp {$$ = $1;} // 相等表达式
-    | LAndExp AND EqExp { // 逻辑与操作
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    | AddExp AND AddExp {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::AND, $1, $3);
     }
-    ;
-LOrExp
-    : LAndExp {$$ = $1;} // 逻辑与表达式
-    | LOrExp OR LAndExp { // 逻辑或操作
+    | AddExp OR AddExp {
         SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
         $$ = new BinaryExpr(se, BinaryExpr::OR, $1, $3);
     }
+    | ADD AddExp %prec UMINUS {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+        $$ = new UnaryExpr(se, UnaryExpr::ADD, $2);
+    }
+    | SUB AddExp %prec UMINUS {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+        $$ = new UnaryExpr(se, UnaryExpr::SUB, $2);
+    }
+    | NOT AddExp %prec UMINUS {
+        SymbolEntry *se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+        $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
+    }
+    | LPAREN AddExp RPAREN {$$ = $2;}
+    | PrimaryExp { $$ = $1; }
     ;
+
+// binaryOp
+//     : ADD { $$ = BinaryExpr::ADD; }
+//     | SUB { $$ = BinaryExpr::SUB; }
+//     | MUL { $$ = BinaryExpr::MUL; }
+//     | DIV { $$ = BinaryExpr::DIV; }
+//     | MOD { $$ = BinaryExpr::MOD; }
+//     | LESS { $$ = BinaryExpr::LESS; }
+//     | LESSEQUAL { $$ = BinaryExpr::LESSEQUAL; }
+//     | GREATER { $$ = BinaryExpr::GREATER; }
+//     | GREATEREQUAL { $$ = BinaryExpr::GREATEREQUAL; }
+//     | EQUAL { $$ = BinaryExpr::EQUAL; }
+//     | NOTEQUAL { $$ = BinaryExpr::NOTEQUAL; }
+//     | AND { $$ = BinaryExpr::AND; }
+//     | OR { $$ = BinaryExpr::OR; }
+//     ;
+
 DeclStmt
     : Type VarDefs SEMICOLON {$$ = $2;} // 变量声明
     | CONST Type ConstDefs SEMICOLON {$$ = $3;} // 常量声明
@@ -275,26 +287,81 @@ ConstDef
 
 FuncDef
     :
-    Type ID {
+    Type ID LPAREN {
         Type *funcType;
-        funcType = new FunctionType($1,{});
+        funcType = new FunctionType($1,vector<Type*>());
         SymbolEntry *se = new IdentifierSymbolEntry(funcType, $2, identifiers->getLevel());
         identifiers->install($2, se);
         identifiers = new SymbolTable(identifiers);
     }
-    LPAREN RPAREN
-    BlockStmt
-    {
+    FuncDefParams RPAREN funcBlock {
+        vector<Type*> paramsType;
+        DeclStmt* curr = (DeclStmt*)$5;
+        while(curr != nullptr)
+        {
+            paramsType.push_back(curr->getId()->getSymbolEntry()->getType());
+            curr = (DeclStmt*)(curr->getNext());
+        }
         SymbolEntry *se;
         se = identifiers->lookup($2);
         assert(se != nullptr);
-        $$ = new FunctionDef(se, $6);
+        FunctionType* tmp = (FunctionType*)(se->getType());
+        tmp->setParamsType(paramsType);
+        $$ = new FunctionDef(se,new CompoundStmt($7), (DeclStmt*)$5);
         SymbolTable *top = identifiers;
         identifiers = identifiers->getPrev();
         delete top;
         delete []$2;
     }
     ;
+
+funcBlock 
+    : LBRACE Stmts RBRACE {
+        $$ = $2;
+    }
+    | LBRACE RBRACE {
+        $$ = new EmptyStmt();
+    }
+
+FuncDefParams
+    : %empty { $$ = nullptr; }
+    | FuncDefParam {
+        $$ = $1;
+    }
+    | FuncDefParams COMMA FuncDefParam {
+        $$ = $1;
+        $$->setNext($3);
+    }
+
+FuncDefParam
+    : Type ID {
+        SymbolEntry* se;
+        se = new IdentifierSymbolEntry($1, $2, identifiers->getLevel());
+        identifiers->install($1->toStr(), se);
+        $$ = new DeclStmt(new Id(se));
+        delete []$2;
+    }
+
+FuncCallExp
+    : ID LPAREN ExpList RPAREN {
+        SymbolEntry *se;
+        se = identifiers->lookup($1);
+        assert(se != nullptr);
+        $$ = new FuncCallExp(se, $3);
+    }
+    ;
+
+ExpList
+    : %empty { $$ = nullptr; }
+    | AddExp {
+        $$ = $1;
+    }
+    | ExpList COMMA AddExp {
+        $$ = $1;
+        $$->setNext($3);
+    }
+    ;
+
 %%
 
 int yyerror(char const* message)

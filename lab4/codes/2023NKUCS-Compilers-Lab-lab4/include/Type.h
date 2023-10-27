@@ -72,6 +72,7 @@ private:
 public:
     FunctionType(Type* returnType, vector<Type*> paramsType) : 
     Type(Type::FUNC), returnType(returnType), paramsType(paramsType){};
+    void setParamsType(vector<Type*> p) {paramsType = p;}
     string toStr();
 };
 
