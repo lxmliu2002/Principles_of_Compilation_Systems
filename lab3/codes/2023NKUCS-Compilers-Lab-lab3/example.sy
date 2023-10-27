@@ -8,50 +8,7 @@ int main()
         return 1;
     return 0;
 }
-1.1111;
-0.12;
-122.3232;
-// */
-f = g/**//h;
-/*//*/ l();
-m = n//**/o
-+ p;
-/* comment */ a = b + c */
 
-/*aww
-mm
-*/
-int shufiews(int a, float b)
-{
-    float d = a;
-    int dhd = f, fu = d, c = 1;
-    while(1)
-    {
-        int a = 1;
-        break;
-    }
-    return 1;
-}
-
-
-int s = 0;
-
-int get_ans_se(int ans, int v0, int v1) {
-  int v = 0;
-  if (v0 == v1) v = 1;
-  ans = ans * 2;
-  ans = ans + v;
-  s = s + ans;
-  return ans;
-}
-
-int get_ans(int ans, int v0, int v1) {
-  int v = 0;
-  if (v0 == v1) v = 1;
-  ans = ans * 2;
-  ans = ans + v;
-  return ans;
-}
 
 int main() {
   const int k0 = -2147483648;
@@ -85,6 +42,7 @@ int main() {
   return a1 + a2 + a3 + a4;
 }
 // Use complex expression in assign structure
+
 int main () {
     int a;
     int b;

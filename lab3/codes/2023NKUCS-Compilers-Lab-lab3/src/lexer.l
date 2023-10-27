@@ -1,5 +1,5 @@
 %option noyywrap 
-/*%option nounput*/
+%option nounput
 %option noinput  
 %option yylineno
 
@@ -35,7 +35,7 @@
 DECIMIAL ([1-9][0-9]*|0)
 /*标识符*/
 ID [[:alpha:]_][[:alpha:][:digit:]_]*
-FUNCID [[:alpha:]_][[:alpha:][:digit:]_]*\(
+
 /*换行符*/
 EOL (\r\n|\n|\r)
 /*空白符*/
@@ -50,7 +50,7 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 
 %x SCOMMENT
 %x MCOMMENT
-%s DEF
+
 
 %%
     /* rules section */
@@ -70,21 +70,21 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
     dump_tokens("INT\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
     isDef = 1;
-    BEGIN DEF;
+
 }
 
 "void" {
     dump_tokens("VOID\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
     isDef = 1;
-    BEGIN DEF;
+
 }
 
 "float" {
     dump_tokens("FLOAT\t%s\t%d\t%d\n", yytext, yylineno - 1, column);
 	column += yyleng;
     isDef = 1;
-    BEGIN DEF;
+
 }
 
 "if" {
@@ -265,37 +265,6 @@ FLOATNUM ((0|[1-9]+)\.[0-9]+)
 	column += yyleng;
 }
 
-<DEF>{FUNCID} {
-    Scope* temp = symbolTable->findScope(yytext, symbolTable->curr);
-    Scope* sc = nullptr;
-    if(temp == nullptr || (isDef && eqLeft))
-    {
-        sc = symbolTable->curr;
-        Symbol* sym = new Symbol;
-        sym->name = strdup(yytext);
-        symbolTable->addSymbol(sym, sc);
-    }
-    else
-    {
-        sc = temp;
-    }
-    char* str;
-    str = strdup(yytext);
-    str[yyleng - 1] = '\0';
-    dump_tokens("FUNCID\t%s\t%d\t%d\t%p\n", str, yylineno - 1, column, sc);
-	column += yyleng - 1;
-    unput('(');
-    //printf("%c",getchar());
-    if(isDef)
-    {
-        eqLeft = 1;
-        funcDef = 1;
-        Scope* newScope = new Scope;
-        symbolTable->addChild(symbolTable->curr, newScope);
-        symbolTable->curr = newScope;
-    }
-    BEGIN INITIAL;
-}
 
 {ID} {
     //char* str = yytext;
