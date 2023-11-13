@@ -1,6 +1,7 @@
 #include "SymbolTable.h"
 #include <iostream>
 #include <sstream>
+#include <Type.h>
 
 SymbolEntry::SymbolEntry(Type *type, int kind) 
 {
@@ -10,19 +11,30 @@ SymbolEntry::SymbolEntry(Type *type, int kind)
 
 ConstantSymbolEntry::ConstantSymbolEntry(Type *type, int value) : SymbolEntry(type, SymbolEntry::CONSTANT)
 {
-    this->value = value;
+    this->value.intValue = value;
+    // printf("value int:%d\n", value);
+}
+
+ConstantSymbolEntry::ConstantSymbolEntry(Type *type, float value) : SymbolEntry(type, SymbolEntry::CONSTANT)
+{
+    this->value.floatValue = value;
+    // printf("value:%f\n", value);
 }
 
 std::string ConstantSymbolEntry::toStr()
 {
     std::ostringstream buffer;
-    buffer << value;
+    if(this->type == TypeSystem::intType)
+        buffer << value.intValue;
+    else
+        buffer << value.floatValue;
     return buffer.str();
 }
 
 IdentifierSymbolEntry::IdentifierSymbolEntry(Type *type, std::string name, int scope) : SymbolEntry(type, SymbolEntry::VARIABLE), name(name)
 {
     this->scope = scope;
+    this->isconst = false;
 }
 
 std::string IdentifierSymbolEntry::toStr()
@@ -71,7 +83,6 @@ SymbolEntry *SymbolTable::lookup(std::string name)
 {
     SymbolTable *current = identifiers;
     while (current != nullptr)
-        // symbolTable为map类型的成员变量
         if (current->symbolTable.find(name) != current->symbolTable.end())
             return current->symbolTable[name];
         else

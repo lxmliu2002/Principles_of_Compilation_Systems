@@ -38,7 +38,12 @@ HEXNUM 0[xX][0-9A-Fa-f]+
 /*八进制数*/
 OCTNUM 0[1-7][0-7]*
 /*浮点数*/
-FLOATNUM ((0|[1-9]+)\.[0-9]+)
+FLOATNUM (([0-9]+)\.[0-9]+)
+
+DECIMIAL_FLOATNUM ((([0-9]*[.][0-9]*([eE][+-]?[0-9]+)?)|([0-9]+[eE][+-]?[0-9]+))[fLlL]?)
+HEXNUM_FLOATNUM (0[xX](([0-9A-Fa-f]*[.][0-9A-Fa-f]*([pP][+-]?[0-9]+)?)|([0-9A-Fa-f]+[pP][+-]?[0-9]+))[fLlL]?)
+OCTNUM_FLOATNUM (0(([0-7]*[.][0-7]*([pP][+-]?[0-9]+)?)|([0-7]+[pP][+-]?[0-9]+))[fLlL]?)
+
 /*单行注释*/
 SCOMMENT \/\/[^\n]*
 
@@ -249,7 +254,28 @@ SCOMMENT \/\/[^\n]*
 
 {FLOATNUM} {
     dump_tokens("FLOATNUM\t%s\t%f\n", yytext, atof(yytext));
+    yylval.ftype = atof(yytext);
+    return FLOATNUM;
+}
+
+{DECIMIAL_FLOATNUM} {
+    dump_tokens("DECIMIAL_FLOATNUM\t%s\t%f\n", yytext, atof(yytext));
     // yylval.ftype = atof(yytext);
+    sscanf(yytext, "%f", &yylval.ftype);
+    return FLOATNUM;
+}
+
+{HEXNUM_FLOATNUM} {
+    dump_tokens("HEXNUM_FLOATNUM\t%s\t%f\n", yytext, atof(yytext));
+    // yylval.ftype = atof(yytext);
+    sscanf(yytext, "%f", &yylval.ftype);
+    return FLOATNUM;
+}
+
+{OCTNUM_FLOATNUM} {
+    dump_tokens("OCTNUM_FLOATNUM\t%s\t%f\n", yytext, atof(yytext));
+    // yylval.ftype = atof(yytext);
+    sscanf(yytext, "%f", &yylval.ftype);
     return FLOATNUM;
 }
 

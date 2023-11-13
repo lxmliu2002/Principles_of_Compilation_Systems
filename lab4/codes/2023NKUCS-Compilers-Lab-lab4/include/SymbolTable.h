@@ -11,16 +11,17 @@ class SymbolEntry
 private:
     int kind;
 protected:
-    enum {CONSTANT, VARIABLE, TEMPORARY};//分为三类：常量，变量，中间变量，由变量kind表示
-    Type *type;//符号的类型
+    enum {CONSTANT, VARIABLE, TEMPORARY};
+    Type *type;
 
 public:
     SymbolEntry(Type *type, int kind);
     virtual ~SymbolEntry() {};
-    bool isConstant() const {return kind == CONSTANT;};
-    bool isTemporary() const {return kind == TEMPORARY;};
-    bool isVariable() const {return kind == VARIABLE;};
-    Type* getType() {return type;};
+    bool isConstant() const {return kind == CONSTANT;}
+    bool isTemporary() const {return kind == TEMPORARY;}
+    bool isVariable() const {return kind == VARIABLE;}
+    Type* getType() {return type;}
+    void setType(Type* type){this->type = type;}
     virtual std::string toStr() = 0;
     // You can add any function you need here.
 };
@@ -33,16 +34,20 @@ public:
 
     Compiler should create constant symbol entry for literal constant '1'.
 */
-//第一类符号表项：常量
+
 class ConstantSymbolEntry : public SymbolEntry
 {
 private:
-    int value;
+    union{
+        int intValue;
+        float floatValue;
+    } value;
 
 public:
     ConstantSymbolEntry(Type *type, int value);
+    ConstantSymbolEntry(Type *type, float value);
     virtual ~ConstantSymbolEntry() {};
-    int getValue() const {return value;};
+    // float getValue() const {return value;};
     std::string toStr();
     // You can add any function you need here.
 };
@@ -70,7 +75,7 @@ public:
     | d        | LOCAL    |
     | e        | LOCAL +1 |
 */
-//第二类符号表项：变量
+
 class IdentifierSymbolEntry : public SymbolEntry
 {
 private:
@@ -78,6 +83,7 @@ private:
     std::string name;
     int scope;
     // You can add any field you need here.
+    bool isconst;
 
 public:
     IdentifierSymbolEntry(Type *type, std::string name, int scope);
@@ -85,6 +91,8 @@ public:
     std::string toStr();
     int getScope() const {return scope;};
     // You can add any function you need here.
+    void setConst(){isconst = true;}
+    bool isConst(){return isconst;} // 是否是const类型的变量
 };
 
 
@@ -106,7 +114,7 @@ public:
     | t1                 | 1     |
     | t2                 | 2     |
 */
-//第三类符号表项：中间变量
+
 class TemporarySymbolEntry : public SymbolEntry
 {
 private:

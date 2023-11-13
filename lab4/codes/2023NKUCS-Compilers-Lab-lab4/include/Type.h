@@ -40,7 +40,7 @@ private:
 public:
     IntType(int size, bool constant = false)
         : Type(Type::INT), size(size), constant(constant){};
-    string toStr();//返回表示该类型的字符串
+    string toStr();
     bool isConstant() { return constant; }
 };
 
@@ -53,7 +53,7 @@ private:
 public:
     FloatType(float size, bool constant = false)
         : Type(Type::FLOAT), size(size), constant(constant){};
-    string toStr();//返回表示该类型的字符串
+    string toStr();
     bool isConstant() { return constant; }
 };
 
@@ -79,8 +79,8 @@ public:
 class ArrayType : public Type
 {
 private:
-    Type *elementType;//数组元素的类型
-    Type *arrayType = nullptr;//数组维度扩充
+    Type *elementType;
+    Type *arrayType = nullptr;
     int length;
     bool constant;
 
@@ -90,8 +90,8 @@ public:
     string toStr();
     int getLength() const { return length; };
     Type *getElementType() const { return elementType; };
-    void setArrayType(Type *arrayType) { this->arrayType = arrayType; };//设置多维数组的数组类型
-    Type *getArrayType() const { return arrayType; };//获取多维数组的数组类型
+    void setArrayType(Type *arrayType) { this->arrayType = arrayType; };
+    Type *getArrayType() const { return arrayType; };
 };
 
 class StringType : public Type
@@ -115,7 +115,8 @@ public:
     static Type *intType;
     static Type *floatType;
     static Type *voidType;
-    static Type *constIntType;
+    // static Type *constIntType;
+    // static Type *constFloatType;
 };
 
 #endif

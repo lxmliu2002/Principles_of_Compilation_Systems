@@ -13,7 +13,7 @@ IntType TypeSystem::commonConstInt = IntType(4, true);
 Type* TypeSystem::intType = &commonInt;
 Type* TypeSystem::floatType = &commonFloat;
 Type* TypeSystem::voidType = &commonVoid;
-Type *TypeSystem::constIntType = &commonConstInt;
+// Type *TypeSystem::constIntType = &commonConstInt;
 
 string IntType::toStr()
 {
@@ -46,14 +46,14 @@ string VoidType::toStr()
 
 string ArrayType::toStr()
 {
-    vector<string> vec;//存储数组的维度信息
+    vector<string> vec;
     Type *temp = this;
-    while (temp && temp->isArray())//非空且为Array
+    while (temp && temp->isArray())
     {
-        ostringstream buffer;//构建维度的字符串表示
+        ostringstream buffer;
         if (temp == this && length == 0)
         {    
-            buffer << '[' << ']';//未知大小的数组
+            buffer << '[' << ']';
         }
         else
         {    
@@ -63,13 +63,19 @@ string ArrayType::toStr()
         temp = ((ArrayType *)temp)->getElementType();
         ;
     }
-    assert(temp->isInt());//检查是否为整数类型
-    ostringstream buffer;//建最终的类型字符串表示
+    ostringstream buffer;
     if (constant)
     {    
         buffer << "const ";
     }
-    buffer << "int";
+    if(temp->isInt())
+    {
+        buffer << "int";
+    }
+    else if(temp->isFloat())
+    {
+        buffer << "float";
+    }
     for (auto it = vec.begin(); it != vec.end(); it++)
     {    
         buffer << *it;
@@ -81,7 +87,7 @@ string FunctionType::toStr()
 {
     ostringstream buffer;
     buffer << returnType->toStr() << "(";
-    for (auto it = paramsType.begin(); it != paramsType.end(); it++) //遍历函数的参数类型
+    for (auto it = paramsType.begin(); it != paramsType.end(); it++)
     {
         buffer << (*it)->toStr();
         if (it + 1 != paramsType.end())
