@@ -17,7 +17,8 @@ protected:
         VOID,
         FUNC,
         ARRAY,
-        STRING
+        STRING,
+        PTR
     };
 public:
     Type(int kind) : kind(kind) {};

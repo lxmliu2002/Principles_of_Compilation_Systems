@@ -21,7 +21,7 @@ public:
     void setNext(Node *node);
     Node *getNext();
 };
-
+//表达式结点
 class ExprNode : public Node
 {
 protected:
@@ -31,9 +31,9 @@ public:
     ExprNode(SymbolEntry *symbolEntry) : symbolEntry(symbolEntry){};
     // virtual int getInt() { return 0; }
     // virtual float getFloat() {return 0;}
-    SymbolEntry *getSymbolEntry() { return symbolEntry; }
+    SymbolEntry *getSymPtr() { return symbolEntry; }
 };
-
+//二元表达式结点
 class BinaryExpr : public ExprNode
 {
 private:

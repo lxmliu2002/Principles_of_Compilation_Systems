@@ -169,8 +169,8 @@ PrimaryExp
 AddExp
     : AddExp ADD AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -179,8 +179,8 @@ AddExp
     }
     | AddExp SUB AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -189,8 +189,8 @@ AddExp
     }
     | AddExp MUL AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -199,8 +199,8 @@ AddExp
     }
     | AddExp DIV AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -209,8 +209,8 @@ AddExp
     }
     | AddExp MOD AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -219,8 +219,8 @@ AddExp
     }
     | AddExp LESS AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -229,8 +229,8 @@ AddExp
     }
     | AddExp LESSEQUAL AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -239,8 +239,8 @@ AddExp
     }
     | AddExp GREATER AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -249,8 +249,8 @@ AddExp
     }
     | AddExp GREATEREQUAL AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -259,8 +259,8 @@ AddExp
     }
     | AddExp EQUAL AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -269,8 +269,8 @@ AddExp
     }
     | AddExp NOTEQUAL AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -279,8 +279,8 @@ AddExp
     }
     | AddExp AND AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -289,8 +289,8 @@ AddExp
     }
     | AddExp OR AddExp {
         Type* type;
-        if($1->getSymbolEntry()->getType() == TypeSystem::floatType 
-        || $3->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($1->getSymPtr()->getType() == TypeSystem::floatType 
+        || $3->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -299,7 +299,7 @@ AddExp
     }
     | ADD AddExp %prec UMINUS {
         Type* type;
-        if($2->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($2->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -308,7 +308,7 @@ AddExp
     }
     | SUB AddExp %prec UMINUS {
         Type* type;
-        if($2->getSymbolEntry()->getType() == TypeSystem::floatType )
+        if($2->getSymPtr()->getType() == TypeSystem::floatType )
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -317,7 +317,7 @@ AddExp
     }
     | NOT AddExp %prec UMINUS {
         Type* type;
-        if($2->getSymbolEntry()->getType() == TypeSystem::floatType)
+        if($2->getSymPtr()->getType() == TypeSystem::floatType)
             type = TypeSystem::floatType;
         else 
             type = TypeSystem::intType;
@@ -350,7 +350,7 @@ DeclStmt
         DeclStmt* curr = (DeclStmt*)$$;
         while(curr != nullptr)
         {
-            curr->getId()->getSymbolEntry()->setType($1);
+            curr->getId()->getSymPtr()->setType($1);
             curr = (DeclStmt*)curr->getNext();
         }
     }
@@ -359,8 +359,8 @@ DeclStmt
         DeclStmt* curr = (DeclStmt*)$$;
         while(curr != nullptr)
         {
-            curr->getId()->getSymbolEntry()->setType($2);
-            ((IdentifierSymbolEntry*)curr->getId()->getSymbolEntry())->setConst();
+            curr->getId()->getSymPtr()->setType($2);
+            ((IdentifierSymbolEntry*)curr->getId()->getSymPtr())->setConst();
             curr = (DeclStmt*)curr->getNext();
         }
     }
@@ -375,7 +375,7 @@ VarDefs
 VarDef
     : ID {
         // Type *type;
-        // if($1->getSymbolEntry()->getType() == TypeSystem::floatType)
+        // if($1->getSymPtr()->getType() == TypeSystem::floatType)
         //     type = TypeSystem::floatType;
         // else 
         //     type = TypeSystem::intType;
@@ -387,7 +387,7 @@ VarDef
     }
     | ID ASSIGN Exp {
         // Type *type;
-        // if($3->getSymbolEntry()->getType() == TypeSystem::floatType)
+        // if($3->getSymPtr()->getType() == TypeSystem::floatType)
         //     type = TypeSystem::floatType;
         // else 
         //     type = TypeSystem::intType;
@@ -415,7 +415,7 @@ VarDef
 // ConstDef
 //     : ID ASSIGN Exp {
 //         // Type *type;
-//         // if($1->getSymbolEntry()->getType() == TypeSystem::floatType)
+//         // if($1->getSymPtr()->getType() == TypeSystem::floatType)
 //         //     type = TypeSystem::floatType;
 //         // else 
 //         //     type = TypeSystem::intType;
@@ -443,7 +443,7 @@ FuncDef
         DeclStmt* curr = (DeclStmt*)$5;
         while(curr != nullptr)
         {
-            paramsType.push_back(curr->getId()->getSymbolEntry()->getType());
+            paramsType.push_back(curr->getId()->getSymPtr()->getType());
             curr = (DeclStmt*)(curr->getNext());
         }
         SymbolEntry *se;
