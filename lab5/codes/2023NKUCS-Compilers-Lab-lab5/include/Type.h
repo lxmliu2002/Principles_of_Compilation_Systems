@@ -9,6 +9,7 @@ class Type
 {
 private:
     int kind;
+
 protected:
     enum
     {
@@ -20,18 +21,19 @@ protected:
         STRING,
         PTR
     };
+
 public:
-    Type(int kind) : kind(kind) {};
-    virtual ~Type() {};
+    Type(int kind) : kind(kind){};
+    virtual ~Type(){};
     virtual std::string toStr() = 0;
-    bool isInt() const {return kind == INT;};
-    bool isFloat() const {return kind == FLOAT;};
-    bool isVoid() const {return kind == VOID;};
-    bool isFunc() const {return kind == FUNC;};
+    bool isInt() const { return kind == INT; };
+    bool isFloat() const { return kind == FLOAT; };
+    bool isVoid() const { return kind == VOID; };
+    bool isFunc() const { return kind == FUNC; };
     bool isArray() const { return kind == ARRAY; };
     bool isString() const { return kind == STRING; };
     bool isPtr() const { return kind == PTR; }
-    static bool isValid(Type* t1, Type* t2);
+    static bool isValid(Type *t1, Type *t2);
 };
 
 class IntType : public Type
@@ -70,19 +72,19 @@ public:
 class FunctionType : public Type
 {
 private:
-    Type *returnType;//返回值类型
-    vector<Type*> paramsType;//参数类型
+    Type *returnType;          // 返回值类型
+    vector<Type *> paramsType; // 参数类型
 public:
-    FunctionType(Type* returnType, vector<Type*> paramsType) : 
-    Type(Type::FUNC), returnType(returnType), paramsType(paramsType){};
-    void setParamsType(vector<Type*> p) {paramsType = p;}
-    Type* getParamsType(unsigned int index){
-        if(index < paramsType.size())
+    FunctionType(Type *returnType, vector<Type *> paramsType) : Type(Type::FUNC), returnType(returnType), paramsType(paramsType){};
+    void setParamsType(vector<Type *> p) { paramsType = p; }
+    Type *getParamsType(unsigned int index)
+    {
+        if (index < paramsType.size())
             return paramsType[index];
         else
             return nullptr;
     }
-    Type* getRetType() {return returnType;};
+    Type *getRetType() { return returnType; };
     std::string toStr();
 };
 
@@ -90,9 +92,10 @@ class PointerType : public Type
 {
 private:
     Type *valueType;
+
 public:
-    PointerType(Type* valueType) : Type(Type::PTR) {this->valueType = valueType;};
-    Type *getValueType(){return valueType;}
+    PointerType(Type *valueType) : Type(Type::PTR) { this->valueType = valueType; };
+    Type *getValueType() { return valueType; }
     std::string toStr();
 };
 
@@ -118,6 +121,7 @@ class StringType : public Type
 {
 private:
     int length;
+
 public:
     StringType(int length) : Type(Type::STRING), length(length){};
     int getLength() const { return length; };
@@ -131,6 +135,7 @@ private:
     static FloatType commonFloat;
     static IntType commonBool;
     static VoidType commonVoid;
+
 public:
     static Type *intType;
     static Type *floatType;

@@ -4,15 +4,14 @@
 
 #ifndef _LINEARSCAN_H__
 #define _LINEARSCAN_H__
-#include <set>
-#include <map>
-#include <vector>
 #include <list>
+#include <map>
+#include <set>
+#include <vector>
 
 class MachineUnit;
 class MachineOperand;
 class MachineFunction;
-
 
 class LinearScan
 {
@@ -21,9 +20,9 @@ private:
     {
         int start;
         int end;
-        bool spill; // whether this vreg should be spilled to memory
-        int disp;   // displacement in stack
-        int rreg;   // the real register mapped from virtual register if the vreg is not spilled to memory
+        bool spill;
+        int disp;
+        int rreg;
         std::set<MachineOperand *> defs;
         std::set<MachineOperand *> uses;
     };
@@ -31,8 +30,10 @@ private:
     MachineFunction *func;
     std::vector<int> regs;
     std::map<MachineOperand *, std::set<MachineOperand *>> du_chains;
-    std::vector<Interval*> intervals;
-    static bool compareStart(Interval*a, Interval*b);
+    std::vector<Interval *> intervals;
+    std::vector<Interval *> active;
+    static bool compareStart(Interval *a, Interval *b);
+    static bool compareEnd(Interval *a, Interval *b);
     void expireOldIntervals(Interval *interval);
     void spillAtInterval(Interval *interval);
     void makeDuChains();
@@ -40,6 +41,7 @@ private:
     bool linearScanRegisterAllocation();
     void modifyCode();
     void genSpillCode();
+
 public:
     LinearScan(MachineUnit *unit);
     void allocateRegisters();

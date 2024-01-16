@@ -1,14 +1,15 @@
 #ifndef __FUNCTION_H__
 #define __FUNCTION_H__
 
-#include <vector>
-#include <map>
-#include <set>
 #include <algorithm>
 #include <iostream>
+#include <map>
+#include <set>
+#include <vector>
+#include "AsmBuilder.h"
+#include "Ast.h"
 #include "BasicBlock.h"
 #include "SymbolTable.h"
-#include "AsmBuilder.h"
 
 class Unit;
 
@@ -30,13 +31,14 @@ public:
     BasicBlock *getEntry() { return entry; };
     void remove(BasicBlock *bb);
     void output() const;
-    std::vector<BasicBlock *> &getBlockList(){return block_list;};
+    std::vector<BasicBlock *> &getBlockList() { return block_list; };
     iterator begin() { return block_list.begin(); };
     iterator end() { return block_list.end(); };
     reverse_iterator rbegin() { return block_list.rbegin(); };
     reverse_iterator rend() { return block_list.rend(); };
     SymbolEntry *getSymPtr() { return sym_ptr; };
-    void genMachineCode(AsmBuilder*);
+    void genMachineCode(AsmBuilder *);
+    std::vector<std::vector<int>> getBlockMap();
 };
 
 #endif

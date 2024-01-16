@@ -1,17 +1,26 @@
 #include "Operand.h"
-#include <sstream>
-#include <algorithm>
 #include <string.h>
+#include <algorithm>
+#include <sstream>
 
 std::string Operand::toStr() const
 {
-    return se->toStr();
+    std::string res = se->toStr(); // llvm ir global variable with `@0`
+    if (typeid(*se) == typeid(IdentifierSymbolEntry))
+    {
+        if (((IdentifierSymbolEntry *)se)->isGlobal())
+        {
+            res = "@" + res;
+        }
+    }
+    return res;
 }
 
 void Operand::removeUse(Instruction *inst)
 {
     auto i = std::find(uses.begin(), uses.end(), inst);
-    if(i != uses.end())
+    if (i != uses.end())
+    {
         uses.erase(i);
+    }
 }
-

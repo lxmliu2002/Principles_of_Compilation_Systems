@@ -3,7 +3,7 @@
 #include "Type.h"
 #include <list>
 
-extern FILE* yyout;
+extern FILE *yyout;
 
 Function::Function(Unit *u, SymbolEntry *s)
 {
@@ -31,18 +31,18 @@ void Function::remove(BasicBlock *bb)
 
 void Function::output() const
 {
-    FunctionType* funcType = dynamic_cast<FunctionType*>(sym_ptr->getType());
+    FunctionType *funcType = dynamic_cast<FunctionType *>(sym_ptr->getType());
     Type *retType = funcType->getRetType();
     std::string paramsStr = "";
-    if(paramsSymPtr.size() != 0)
+    if (paramsSymPtr.size() != 0)
     {
-        for(auto p : paramsSymPtr)
+        for (auto p : paramsSymPtr)
         {
-            paramsStr += p->getType()->toStr() + " " + ((IdentifierSymbolEntry*)p)->getAddr()->toStr() + ", ";
+            paramsStr += p->getType()->toStr() + " " + ((IdentifierSymbolEntry *)p)->getAddr()->toStr() + ", ";
         }
         paramsStr = paramsStr.substr(0, paramsStr.size() - 2);
     }
-    
+
     fprintf(yyout, "define %s %s(%s) {\n", retType->toStr().c_str(), sym_ptr->toStr().c_str(), paramsStr.c_str());
     std::set<BasicBlock *> v;
     std::list<BasicBlock *> q;

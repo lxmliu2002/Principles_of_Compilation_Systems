@@ -2,7 +2,7 @@
 #include "Function.h"
 #include <algorithm>
 
-extern FILE* yyout;
+extern FILE *yyout;
 
 // insert the instruction to the front of the basicblock.
 void BasicBlock::insertFront(Instruction *inst)
@@ -11,7 +11,7 @@ void BasicBlock::insertFront(Instruction *inst)
 }
 
 // insert the instruction to the back of the basicblock.
-void BasicBlock::insertBack(Instruction *inst) 
+void BasicBlock::insertBack(Instruction *inst)
 {
     insertBefore(inst, head);
 }
@@ -20,13 +20,13 @@ void BasicBlock::insertBack(Instruction *inst)
 void BasicBlock::insertBefore(Instruction *dst, Instruction *src)
 {
     // Todo
-    Instruction* curr = head;
-    while(curr != src)
+    Instruction *curr = head;
+    while (curr != src)
     {
         curr = curr->getNext();
-        if(curr == head)
+        if (curr == head)
         {
-            std::cerr<<"no such instruction" << std::hex << src <<std::endl;
+            std::cerr << "no such instruction" << std::hex << src << std::endl;
         }
     }
     curr->getPrev()->setNext(dst);
@@ -100,9 +100,9 @@ BasicBlock::~BasicBlock()
         inst = inst->getNext();
         delete t;
     }
-    for(auto &bb:pred)
+    for (auto &bb : pred)
         bb->removeSucc(this);
-    for(auto &bb:succ)
+    for (auto &bb : succ)
         bb->removePred(this);
     parent->remove(this);
 }

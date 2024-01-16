@@ -1,6 +1,6 @@
 #include "LiveVariableAnalysis.h"
-#include "MachineCode.h"
 #include <algorithm>
+#include "MachineCode.h"
 
 void LiveVariableAnalysis::pass(MachineUnit *unit)
 {
@@ -27,11 +27,12 @@ void LiveVariableAnalysis::computeDefUse(MachineFunction *func)
         {
             auto user = (*inst)->getUse();
             std::set<MachineOperand *> temp(user.begin(), user.end());
-            set_difference(temp.begin(), temp.end(),
-                           def[block].begin(), def[block].end(), inserter(use[block], use[block].end()));
+            set_difference(temp.begin(), temp.end(), def[block].begin(), def[block].end(), inserter(use[block], use[block].end()));
             auto defs = (*inst)->getDef();
             for (auto &d : defs)
+            {
                 def[block].insert(all_uses[*d].begin(), all_uses[*d].end());
+            }
         }
     }
 }
@@ -39,7 +40,9 @@ void LiveVariableAnalysis::computeDefUse(MachineFunction *func)
 void LiveVariableAnalysis::iterate(MachineFunction *func)
 {
     for (auto &block : func->getBlocks())
+    {
         block->getLiveIn().clear();
+    }
     bool change;
     change = true;
     while (change)
@@ -50,13 +53,16 @@ void LiveVariableAnalysis::iterate(MachineFunction *func)
             block->getLiveOut().clear();
             auto old = block->getLiveIn();
             for (auto &succ : block->getSuccs())
+            {
                 block->getLiveOut().insert(succ->getLiveIn().begin(), succ->getLiveIn().end());
+            }
             block->getLiveIn() = use[block];
             std::vector<MachineOperand *> temp;
-            set_difference(block->getLiveOut().begin(), block->getLiveOut().end(),
-                           def[block].begin(), def[block].end(), inserter(block->getLiveIn(), block->getLiveIn().end()));
+            set_difference(block->getLiveOut().begin(), block->getLiveOut().end(), def[block].begin(), def[block].end(), inserter(block->getLiveIn(), block->getLiveIn().end()));
             if (old != block->getLiveIn())
+            {
                 change = true;
+            }
         }
     }
 }
@@ -69,7 +75,9 @@ void LiveVariableAnalysis::computeUsePos(MachineFunction *func)
         {
             auto uses = inst->getUse();
             for (auto &use : uses)
+            {
                 all_uses[*use].insert(use);
+            }
         }
     }
 }

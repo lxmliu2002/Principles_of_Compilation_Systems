@@ -21,7 +21,7 @@ private:
     SymbolEntry *sym_ptr;
     BasicBlock *entry;
     Unit *parent;
-    std::vector<SymbolEntry*> paramsSymPtr;
+    std::vector<SymbolEntry *> paramsSymPtr;
 
 public:
     Function(Unit *, SymbolEntry *);
@@ -30,13 +30,13 @@ public:
     BasicBlock *getEntry() { return entry; };
     void remove(BasicBlock *bb);
     void output() const;
-    std::vector<BasicBlock *> &getBlockList(){return block_list;};
+    std::vector<BasicBlock *> &getBlockList() { return block_list; };
     iterator begin() { return block_list.begin(); };
     iterator end() { return block_list.end(); };
     reverse_iterator rbegin() { return block_list.rbegin(); };
     reverse_iterator rend() { return block_list.rend(); };
     SymbolEntry *getSymPtr() { return sym_ptr; };
-    void addParam(SymbolEntry* se){paramsSymPtr.push_back(se);}
+    void addParam(SymbolEntry *se) { paramsSymPtr.push_back(se); }
 };
 
 #endif

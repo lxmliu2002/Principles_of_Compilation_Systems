@@ -6,15 +6,14 @@ FloatType TypeSystem::commonFloat = FloatType(32);
 IntType TypeSystem::commonBool = IntType(1);
 VoidType TypeSystem::commonVoid = VoidType();
 
-Type* TypeSystem::intType = &commonInt;
-Type* TypeSystem::floatType = &commonFloat;
-Type* TypeSystem::voidType = &commonVoid;
-Type* TypeSystem::boolType = &commonBool;
+Type *TypeSystem::intType = &commonInt;
+Type *TypeSystem::floatType = &commonFloat;
+Type *TypeSystem::voidType = &commonVoid;
+Type *TypeSystem::boolType = &commonBool;
 
-bool Type::isValid(Type* t1, Type* t2)
+bool Type::isValid(Type *t1, Type *t2)
 {
-    if(t1->isFloat() || t2->isFloat() 
-    || t1->isInt() || t2->isInt() || t1 == t2)
+    if (t1->isFloat() || t2->isFloat() || t1->isInt() || t2->isInt() || t1 == t2)
         return true;
     return false;
 }
@@ -46,11 +45,11 @@ string ArrayType::toStr()
     {
         ostringstream buffer;
         if (temp == this && length == 0)
-        {    
+        {
             buffer << '[' << ']';
         }
         else
-        {    
+        {
             buffer << '[' << ((ArrayType *)temp)->getLength() << ']';
         }
         vec.push_back(buffer.str());
@@ -59,19 +58,19 @@ string ArrayType::toStr()
     }
     ostringstream buffer;
     if (constant)
-    {    
+    {
         buffer << "const ";
     }
-    if(temp->isInt())
+    if (temp->isInt())
     {
         buffer << "int";
     }
-    else if(temp->isFloat())
+    else if (temp->isFloat())
     {
         buffer << "float";
     }
     for (auto it = vec.begin(); it != vec.end(); it++)
-    {    
+    {
         buffer << *it;
     }
     return buffer.str();
@@ -85,7 +84,7 @@ std::string FunctionType::toStr()
     {
         buffer << (*it)->toStr();
         if (it + 1 != paramsType.end())
-        {    
+        {
             buffer << ", ";
         }
     }

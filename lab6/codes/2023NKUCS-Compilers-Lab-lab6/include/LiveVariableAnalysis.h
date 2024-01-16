@@ -1,8 +1,8 @@
 #ifndef __LIVE_VARIABLE_ANALYSIS_H__
 #define __LIVE_VARIABLE_ANALYSIS_H__
 
-#include <set>
 #include <map>
+#include <set>
 
 class MachineFunction;
 class MachineUnit;
@@ -20,7 +20,10 @@ private:
 public:
     void pass(MachineUnit *unit);
     void pass(MachineFunction *func);
-    std::map<MachineOperand, std::set<MachineOperand *>> &getAllUses() { return all_uses; };
+    std::map<MachineOperand, std::set<MachineOperand *>> &getAllUses()
+    {
+        return all_uses;
+    };
 };
 
 #endif

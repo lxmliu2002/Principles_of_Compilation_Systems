@@ -23,7 +23,7 @@ public:
     void insertBack(Instruction *);
     void insertBefore(Instruction *, Instruction *);
     void remove(Instruction *);
-    bool empty() const { return head->getNext() == head;}
+    bool empty() const { return head->getNext() == head; }
     void output() const;
     bool succEmpty() const { return succ.empty(); };
     bool predEmpty() const { return pred.empty(); };
@@ -33,10 +33,10 @@ public:
     void removePred(BasicBlock *);
     int getNo() { return no; };
     Function *getParent() { return parent; };
-    Instruction* begin() { return head->getNext();};
-    Instruction* end() { return head;};
-    Instruction* rbegin() { return head->getPrev();};
-    Instruction* rend() { return head;};
+    Instruction *begin() { return head->getNext(); };
+    Instruction *end() { return head; };
+    Instruction *rbegin() { return head->getPrev(); };
+    Instruction *rend() { return head; };
     bb_iterator succ_begin() { return succ.begin(); };
     bb_iterator succ_end() { return succ.end(); };
     bb_iterator pred_begin() { return pred.begin(); };

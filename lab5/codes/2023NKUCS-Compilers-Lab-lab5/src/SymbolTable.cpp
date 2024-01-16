@@ -3,7 +3,7 @@
 #include <sstream>
 #include <Type.h>
 
-SymbolEntry::SymbolEntry(Type *type, int kind) 
+SymbolEntry::SymbolEntry(Type *type, int kind)
 {
     this->type = type;
     this->kind = kind;
@@ -18,16 +18,20 @@ ConstantSymbolEntry::ConstantSymbolEntry(Type *type, int value) : SymbolEntry(ty
 ConstantSymbolEntry::ConstantSymbolEntry(Type *type, float value) : SymbolEntry(type, SymbolEntry::CONSTANT)
 {
     this->value.floatValue = value;
-// printf("value:%f\n", value);
+    // printf("value:%f\n", value);
 }
 
 std::string ConstantSymbolEntry::toStr()
 {
     std::ostringstream buffer;
-    if(this->type == TypeSystem::intType)
+    if (this->type == TypeSystem::intType)
         buffer << value.intValue;
     else
-        buffer << value.floatValue;
+    {
+        char tmp[100];
+        sprintf(tmp, "%e", value.floatValue);
+        buffer << tmp;
+    }
     return buffer.str();
 }
 
@@ -69,7 +73,7 @@ SymbolTable::SymbolTable(SymbolTable *prev)
 
 /*
     Description: lookup the symbol entry of an identifier in the symbol table
-    Parameters: 
+    Parameters:
         name: identifier name
     Return: pointer to the symbol entry of the identifier
 
@@ -80,20 +84,20 @@ SymbolTable::SymbolTable(SymbolTable *prev)
     4. If you find the entry, return it.
     5. If you can't find it in all symbol tables, return nullptr.
 */
-SymbolEntry* SymbolTable::lookup(std::string name)
+SymbolEntry *SymbolTable::lookup(std::string name)
 {
     SymbolTable *current = identifiers;
     while (current != nullptr)
         if (current->symbolTable.find(name) != current->symbolTable.end())
             return current->symbolTable[name];
         else
-            //向下一个SymbolTable去找
+            // 向下一个SymbolTable去找
             current = current->prev;
     return nullptr;
 }
 
 // install the entry into current symbol table.
-void SymbolTable::install(std::string name, SymbolEntry* entry)
+void SymbolTable::install(std::string name, SymbolEntry *entry)
 {
     symbolTable[name] = entry;
 }

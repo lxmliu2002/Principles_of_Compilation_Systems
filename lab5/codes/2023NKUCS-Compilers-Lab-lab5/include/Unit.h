@@ -11,14 +11,15 @@ class Unit
 
 private:
     std::vector<Function *> func_list;
-    std::vector<GlobalVarDefInstruction*> global_var;
+    std::vector<GlobalVarDefInstruction *> global_var;
+
 public:
     Unit() = default;
-    ~Unit() ;
+    ~Unit();
     void insertFunc(Function *);
     void removeFunc(Function *);
-    void insertGlobalVar(GlobalVarDefInstruction* i){global_var.push_back(i);}
-    void removeGlobalVar(GlobalVarDefInstruction* i){global_var.erase(std::find(global_var.begin(), global_var.end(), i));}
+    void insertGlobalVar(GlobalVarDefInstruction *i) { global_var.push_back(i); }
+    void removeGlobalVar(GlobalVarDefInstruction *i) { global_var.erase(std::find(global_var.begin(), global_var.end(), i)); }
     void output() const;
     iterator begin() { return func_list.begin(); };
     iterator end() { return func_list.end(); };

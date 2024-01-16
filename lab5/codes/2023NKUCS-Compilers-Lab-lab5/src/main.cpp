@@ -113,14 +113,14 @@ int main(int argc, char *argv[])
     identifiers->install("stoptime", se);
 
     yyparse();
-    if(dump_type == AST)
+    if (dump_type == AST)
     {
         ast.output();
         return 0;
     }
     ast.typeCheck();
     ast.genCode(&unit);
-    if(dump_type == IR)
+    if (dump_type == IR)
         unit.output();
     return 0;
 }

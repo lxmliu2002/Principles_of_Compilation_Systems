@@ -262,20 +262,33 @@ AddExp
         $$ = new UnaryExpr(se, UnaryExpr::ADD, $2);
     }
     | SUB AddExp %prec UMINUS {
-        Type* type;
-        if($2->getSymPtr()->getType() == TypeSystem::floatType )
-            type = TypeSystem::floatType;
-        else 
-            type = TypeSystem::intType;
-        SymbolEntry *se = new TemporarySymbolEntry(type, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::SUB, $2);
+        if($2->getSymPtr()->isConstant())
+        {
+            ConstantSymbolEntry* tmp = (ConstantSymbolEntry*)$2->getSymPtr();
+            if(tmp->getType()->isInt())
+            {
+                tmp->setValue(-tmp->getInt());
+            }
+            else if(tmp->getType()->isFloat())
+            {
+                tmp->setValue(-tmp->getFloat());
+            }
+            $$ = $2;
+        }
+        else
+        {
+            Type* type;
+            if($2->getSymPtr()->getType() == TypeSystem::floatType )
+                type = TypeSystem::floatType;
+            else 
+                type = TypeSystem::intType;
+            SymbolEntry *se = new TemporarySymbolEntry(type, SymbolTable::getLabel());
+            $$ = new UnaryExpr(se, UnaryExpr::SUB, $2);
+        }
     }
     | NOT AddExp %prec UMINUS {
         Type* type;
-        if($2->getSymPtr()->getType() == TypeSystem::floatType)
-            type = TypeSystem::floatType;
-        else 
-            type = TypeSystem::intType;
+        type = TypeSystem::boolType;
         SymbolEntry *se = new TemporarySymbolEntry(type, SymbolTable::getLabel());
         $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
     }
@@ -352,6 +365,11 @@ VarDef
         // else 
         //     type = TypeSystem::intType;
         // SymbolEntry* se = new IdentifierSymbolEntry(type, $1, identifiers->getLevel());
+        if(identifiers->checkExist($1))
+        {
+            fprintf(stderr, "redefined variable %s\n", $1);
+            exit(-1);
+        }
         SymbolEntry* se = new IdentifierSymbolEntry(TypeSystem::intType, $1, identifiers->getLevel());
         identifiers->install($1, se);
         $$ = new DeclStmt(new Id(se), $3);
@@ -394,6 +412,11 @@ FuncDef
     Type ID LPAREN {
         Type *funcType;
         funcType = new FunctionType($1,vector<Type*>());
+        if(identifiers->checkExist($2))
+        {
+            fprintf(stderr, "redefined function\n");
+            exit(-1);
+        }
         SymbolEntry *se = new IdentifierSymbolEntry(funcType, $2, identifiers->getLevel());
         identifiers->install($2, se);
         identifiers = new SymbolTable(identifiers);

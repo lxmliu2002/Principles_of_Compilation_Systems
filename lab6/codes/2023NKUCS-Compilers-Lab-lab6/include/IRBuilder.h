@@ -9,13 +9,14 @@ class IRBuilder
 {
 private:
     Unit *unit;
-    BasicBlock *insertBB;   // The current basicblock that instructions should be inserted into.
+    BasicBlock *
+        insertBB;
 
 public:
-    IRBuilder(Unit*unit) : unit(unit){};
-    void setInsertBB(BasicBlock*bb){insertBB = bb;};
-    Unit* getUnit(){return unit;};
-    BasicBlock* getInsertBB(){return insertBB;};
+    IRBuilder(Unit *unit) : unit(unit){};
+    void setInsertBB(BasicBlock *bb) { insertBB = bb; };
+    Unit *getUnit() { return unit; };
+    BasicBlock *getInsertBB() { return insertBB; };
 };
 
 #endif
