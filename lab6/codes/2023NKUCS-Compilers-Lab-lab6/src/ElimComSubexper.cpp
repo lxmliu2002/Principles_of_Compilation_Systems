@@ -9,6 +9,82 @@ const int N = 2000100;
 bool ste[N];
 unordered_map<int, VAEB> AEin, AEout;
 
+
+
+void delAEB(SymbolEntry *sym, VAEB AEB)//从值编号表达式列表中删除与给定符号相关的项
+{
+    int len = AEB.size();
+    for (int i = 0; i < len; i++)
+    {
+        if (sym == AEB[i].opd1 || sym == AEB[i].opd2)
+        {
+            for (int j = i; j < len - 1; j++)
+            {
+                AEB[j] = AEB[j + 1];
+            }
+            len--;
+        }
+    }
+}
+
+VAEB vec_intersection(VAEB v1, VAEB v2)//交集
+{
+    VAEB v11, v22, res;
+    int len = min(v1.size(), v2.size());
+    if (v1.size() > v2.size())
+    {
+        v11 = v2;
+        v22 = v1;
+    }
+    else
+    {
+        v11 = v1;
+        v22 = v2;
+    }
+    VAEB::iterator it;
+    for (int i = 0; i < len; i++)
+    {
+        it = find(v22.begin(), v22.end(), v11[i]);
+        if (it != v22.end())
+        {
+            res.push_back(v11[i]);
+        }
+    }
+    return res;
+}
+
+VAEB vec_union(VAEB v1, VAEB v2)//并集
+{
+    VAEB res(v1);
+    VAEB::iterator it;
+    for (unsigned i = 0; i < v2.size(); i++)
+    {
+        it = find(v1.begin(), v1.end(), v2[i]);
+        if (it == v1.end())
+        {
+            res.push_back(v2[i]);
+        }
+    }
+    return res;
+}
+
+VAEB vintersection(BasicBlock *bb)//bb 的入口值编号表达式列表的交集
+{
+    VAEB res;
+    bb_iterator iter = bb->pred_begin();
+    bb_iterator end = bb->pred_end();
+    while (iter != end)
+    {
+        int no = (*iter)->getNo();
+        if (ste[no])
+        {
+            res = vec_intersection(res, AEout[no]);
+        }
+        iter++;
+    }
+    return res;
+}
+
 void ElimComSubexpr::local_elim_cse(BasicBlock *bb, VAEB AEB)
 {
     int no = bb->getNo();
@@ -92,80 +168,6 @@ void ElimComSubexpr::local_elim_cse(BasicBlock *bb, VAEB AEB)
     }
     AEout[no] = vec_union(AEB, AEin[no]);
     AEB.clear();
-}
-
-void delAEB(SymbolEntry *sym, VAEB AEB)//从值编号表达式列表中删除与给定符号相关的项
-{
-    int len = AEB.size();
-    for (int i = 0; i < len; i++)
-    {
-        if (sym == AEB[i].opd1 || sym == AEB[i].opd2)
-        {
-            for (int j = i; j < len - 1; j++)
-            {
-                AEB[j] = AEB[j + 1];
-            }
-            len--;
-        }
-    }
-}
-
-VAEB vec_intersection(VAEB v1, VAEB v2)//交集
-{
-    VAEB v11, v22, res;
-    int len = min(v1.size(), v2.size());
-    if (v1.size() > v2.size())
-    {
-        v11 = v2;
-        v22 = v1;
-    }
-    else
-    {
-        v11 = v1;
-        v22 = v2;
-    }
-    VAEB::iterator it;
-    for (int i = 0; i < len; i++)
-    {
-        it = find(v22.begin(), v22.end(), v11[i]);
-        if (it != v22.end())
-        {
-            res.push_back(v11[i]);
-        }
-    }
-    return res;
-}
-
-VAEB vec_union(VAEB v1, VAEB v2)//并集
-{
-    VAEB res(v1);
-    VAEB::iterator it;
-    for (unsigned i = 0; i < v2.size(); i++)
-    {
-        it = find(v1.begin(), v1.end(), v2[i]);
-        if (it == v1.end())
-        {
-            res.push_back(v2[i]);
-        }
-    }
-    return res;
-}
-
-VAEB vintersection(BasicBlock *bb)//bb 的入口值编号表达式列表的交集
-{
-    VAEB res;
-    bb_iterator iter = bb->pred_begin();
-    bb_iterator end = bb->pred_end();
-    while (iter != end)
-    {
-        int no = (*iter)->getNo();
-        if (ste[no])
-        {
-            res = vec_intersection(res, AEout[no]);
-        }
-        iter++;
-    }
-    return res;
 }
 
 void ElimComSubexpr::elim_cse()
